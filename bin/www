@@ -4,6 +4,10 @@
  * Module dependencies.
  */
 
+
+var io = require('socket.io')();
+var Lobby = require('../private/core/Lobby');
+var lobby = new Lobby(io);
 var app = require('../app');
 var debug = require('debug')('morpion:server');
 var http = require('http');

@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-let conf = require('../private/conf.json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,7 +8,19 @@ router.get('/', function(req, res, next) {
 		css_links: [
 			'/stylesheet/general.css',
 			'/stylesheet/index.css'
-		]});
+		]
+	});
+});
+
+/*GET play game page*/
+router.get('/play', (req, res, next) => {
+	res.status(200).render('play', {
+		title: "Select a room",
+		css_links: [
+			'/stylesheet/general.css',
+			'/stylesheet/play.css'
+		]
+	})
 });
 
 module.exports = router;
