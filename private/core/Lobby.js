@@ -3,20 +3,25 @@ module.exports = class Lobby{
 		this.io = io;
 		this.lobby = {};
 
-		console.log('test');
-
 		this.io.on('connection', (socket) => {
+			console.log('user connected');
 			socket.join('/');
 			this.returnLobby(socket);
 		})
 	}
 
 	addRoom(room){
-		this.lobby[room] = new Room(this.io, room);
+		this.lobby[room] = new Room(this.io);
+	}
+	
+	deleteRoom(room){
+		this.lobby[room].close();
+		delete this.lobby[room];
 	}
 
 	returnLobby(socket){
-		res = [];
+		console.log('return Lobby');
+		let res = [];
 		for(let room in this.lobby){
 			room = this.lobby[room];
 			res.push({
@@ -25,6 +30,6 @@ module.exports = class Lobby{
 				nbPlayer: room.players.length
 			})
 		}
-		socket.send('init_rooms', res)
+		this.io.to(socket.id).emit('init_rooms', res)
 	}
 };
