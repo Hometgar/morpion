@@ -1,3 +1,6 @@
+let Room = require('./Room');
+
+
 module.exports = class Lobby{
 	constructor(io){
 		this.io = io;
@@ -7,11 +10,21 @@ module.exports = class Lobby{
 			console.log('user connected');
 			socket.join('/');
 			this.returnLobby(socket);
+			
+			socket.on('create_room', (name)=>{
+				this.addRoom(name);
+				socket.join('/'+name);
+				socket.emit('switch_to', name);
+			})
+			
+			socket.on('test', ()=>{
+			    console.log('Lobby test')
+			})
 		})
 	}
 
 	addRoom(room){
-		this.lobby[room] = new Room(this.io);
+		this.lobby[room] = new Room(this.io, room);
 	}
 	
 	deleteRoom(room){
@@ -26,10 +39,10 @@ module.exports = class Lobby{
 			room = this.lobby[room];
 			res.push({
 				name: room.name,
-				state: room.state,
-				nbPlayer: room.players.length
+				state: room.game.state,
+				nbPlayer: room.game.players.length
 			})
 		}
-		this.io.to(socket.id).emit('init_rooms', res)
+		socket.emit('init_rooms', res)
 	}
 };
