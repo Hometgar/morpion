@@ -1,8 +1,19 @@
 extends layout
 
 block content
-    h1= title
-    ul#lobby-container
+	h1= title
+	button#add-room(class="toggle-create-room")= "Create your own room"
+	ul#lobby-container
 
-    script(src="/socket.io/socket.io.js")
-    script(src="/script/User.js")
+	div#create-room(style={display: "none"})
+		button#cancel(class="toggle-create-room")= "Cancel"
+		form#create-room-form
+			input#room-name(name="room-name" placeholder="Name Your Room")
+			button#submit= "Create Your Room"
+
+
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js")
+	script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js")
+	script(src="/script/User.js")
+	script
+		include ../public/script/index.js
