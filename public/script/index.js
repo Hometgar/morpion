@@ -2,7 +2,7 @@
 $(document).ready(()=>{
     $('.toggle-create-room').click(()=>{
 	    createRoomToogle();
-    })
+    });
 	
 	$('#create-room-form').submit((e)=>{
 	    e.preventDefault();
@@ -12,7 +12,7 @@ $(document).ready(()=>{
 		    user.createRoom(name);
 		    createRoomToogle();
 	    }
-	})
+	});
 });
 
 function createRoomToogle(){

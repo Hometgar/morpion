@@ -1,19 +1,39 @@
 extends layout
 
 block content
-	h1= title
-	button#add-room(class="toggle-create-room")= "Create your own room"
-	ul#lobby-container
+	section#lobby
+		h1= title
+		button#add-room(class="toggle-create-room")= "Create your own room"
+		ul#lobby-container
 
-	div#create-room(style={display: "none"})
-		button#cancel(class="toggle-create-room")= "Cancel"
-		form#create-room-form
-			input#room-name(name="room-name" placeholder="Name Your Room")
-			button#submit= "Create Your Room"
+		div#create-room(style={display: "none"})
+			button#cancel(class="toggle-create-room")= "Cancel"
+			form#create-room-form
+				input#room-name(name="room-name" placeholder="Name Your Room")
+				button#submit= "Create Your Room"
 
+
+	section#game(style={display:"none"})
+		h1#active-room-name
+		div#game-screen
+			tbody
+				table#game-board
+					- n = 0
+					while n < 3
+						tr(data-row = n++)
+							td(data-column = 0)
+							td(data-column = 1)
+							td(data-column = 2)
+
+			div#screen
+				span#state
+				span#active-player
+				span#player-signe-reminder
+					= "Your symbol X"
 
 	script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js")
-	script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.slim.min.js")
+	script(src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous")
 	script(src="/script/User.js")
+	script(src="/script/GameInstance.js")
 	script
 		include ../public/script/index.js

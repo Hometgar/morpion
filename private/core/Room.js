@@ -1,35 +1,41 @@
-require('./Morpion');
+let Morpion = require('./Morpion');
 module.exports = class Room{
-	constructor(io, name){
+	constructor(io, name, lobby){
 		this.namespace = io.of('/'+name);
 		this.name = name;
-		this.game = new Morpion();
-		
+		this.game = new Morpion(this.namespace);
+
 		console.log('ROOM CREATED');
 		this.namespace.on('connection',(socket)=>{
-			console.log('there is a connection');
-			socket.on('add_user',()=>{
-				if(this.game.players.length < 2 &&
-					this.game.players.indexOf(socket) < 0 &&
-					this.game.state === Morpion.validState.WAITING){
-					this.game.addPlayer(socket);
-					return socket.emit('switch_to', this.name)
+			//verify if the user can connect
+			if(this.game.players.length < 2 &&
+				this.game.players.indexOf(socket) < 0 &&
+				this.game.state === this.game.validState.WAITING){
+				this.game.addPlayer(socket);
+				if(this.game.players.length === 2){
+					this.namespace.emit('launch', this.game.serialize());
 				}
+			}
 
-				return this.namespace.to(socket.id).emit('error', 'INVALID ROOM')
-			});
-			
 			socket.on('disconnect', ()=>{
-				console.log('disconnection of ', socket.id);
-				
-				this.namespace.emit('disconnect')
+				this.game.deletePlayer(socket);
+				if(this.game.players.length === 0){
+					lobby.deleteRoom(name);
+				}
 			});
-			
-			socket.on('test', ()=>{
-				console.log('room test')
-			})
 		})
 		
 	}
-	
+
+	/**
+	 * return a serialized version of the room instance
+	 * @returns {{name: *, state: *, nbPlayer: Number}}
+	 */
+	serialize(){
+		return{
+			name: this.name,
+			state: this.game.state,
+			nbPlayer: this.game.players.length
+		}
+	}
 };

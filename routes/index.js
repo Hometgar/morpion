@@ -6,8 +6,8 @@ router.get('/', function(req, res, next) {
 	res.status(200).render('index', {
 		title: 'Morpion',
 		css_links: [
-			'/stylesheet/general.css',
-			'/stylesheet/index.css'
+			'/stylesheets/general.css',
+			'/stylesheets/index.css'
 		]
 	});
 });
@@ -17,8 +17,8 @@ router.get('/play', (req, res, next) => {
 	res.status(200).render('play', {
 		title: "Select a room",
 		css_links: [
-			'/stylesheet/general.css',
-			'/stylesheet/play.css'
+			'/stylesheets/general.css',
+			'/stylesheets/play.css'
 		]
 	})
 });

@@ -38,8 +38,9 @@ module.exports = class Morpion{
 				return this.serialize();
 			}
 			console.log(socketPlayer.id, 'has been add');
+		}else {
+			throw new Error('Already close');
 		}
-		throw new Error('Already close');
 	}
 
 	/**

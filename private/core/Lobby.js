@@ -12,24 +12,28 @@ module.exports = class Lobby{
 			this.returnLobby(socket);
 			
 			socket.on('create_room', (name)=>{
-				this.addRoom(name);
-				socket.join('/'+name);
-				socket.emit('switch_to', name);
-			})
-			
-			socket.on('test', ()=>{
-			    console.log('Lobby test')
-			})
+				if(!this.lobby[name]) {
+					this.addRoom(name);
+					return socket.emit('room_created', name)
+				}
+
+				return socket.emit('error_msg', 'ROOM NAME ALREADY TAKEN');
+			});
 		})
 	}
 
 	addRoom(room){
-		this.lobby[room] = new Room(this.io, room);
+		this.lobby[room] = new Room(this.io, room, this);
+		this.io.emit('update_lobby', this.lobby[room].serialize());
 	}
-	
+
 	deleteRoom(room){
-		this.lobby[room].close();
-		delete this.lobby[room];
+		if(this.lobby[room]) {
+			for (let socketId in this.lobby[room].namespace.connected) {
+				this.lobby[room].namespace.connected[socketId].disconnect();
+			}
+			delete this.lobby[room];
+		}
 	}
 
 	returnLobby(socket){
@@ -37,11 +41,7 @@ module.exports = class Lobby{
 		let res = [];
 		for(let room in this.lobby){
 			room = this.lobby[room];
-			res.push({
-				name: room.name,
-				state: room.game.state,
-				nbPlayer: room.game.players.length
-			})
+			res.push(room.serialize())
 		}
 		socket.emit('init_rooms', res)
 	}
