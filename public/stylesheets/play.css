@@ -1,0 +1,57 @@
+table {
+    border-collapse: collapse;
+}
+
+table, td {
+    border: 1px solid black;
+}
+
+td{
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 50px;
+}
+
+#create-room{
+    width: 40vw;
+    position: absolute;
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin-top: 10vh;
+    background-color: white;
+    z-index: 2;
+    border: 1px solid black;
+    height: 20vh;
+}
+
+#create-room #cancel{
+    position: absolute;
+    right: 0;
+}
+
+#create-room #create-room-form{
+    position: absolute;
+    left: 30%;
+    top: 50%;
+}
+
+#game{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 25vw;
+    left: 37.5vw;
+}
+
+#game-screen{
+    display: flex;
+}
+
+#screen{
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+}
